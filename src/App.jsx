@@ -11,7 +11,13 @@ class App extends Component {
 constructor(){
   super();
   this.state={
-    empList: []
+    empList: [],
+    activeEmp: {
+    empId: '',
+    empName: '',
+    email: '',
+    address:''
+  }
   }
 }
 
@@ -20,29 +26,59 @@ componentWillMount(){
 }
 
 componentDidMount(){
-  console.log("DID");
   this.setState({empList: data});
 }
 
-addNewEmploee= () =>{
+addNewEmploee= (emp) =>{
+
+  const { empList } = this.state;
+  const d = empList.filter(i=>i.emp_id === emp.emp_id);
+
+if(d.length){
+const  index = empList.indexOf(d[0]);
+empList[index] = emp;
+}else{
+  empList.push(emp);
+}
+
+
+
+  this.setState({empList: empList});
+
 
 }
 
-deleteEmployee=()=>{
+deleteEmployee=(id)=>{
 
+  const { empList } = this.state;
+
+  const updatedList = empList.filter(item=>item.emp_id !== id);
+
+
+
+  this.setState({empList: updatedList});
 }
 
-editEmployee=()=>{
+editEmployee=(empId)=>{
+  console.log(empId);
+  const { empList } = this.state;
+  const emp = empList.filter(item=>empId === item.emp_id);
+  this.setState({activeEmp: emp[0]});
 
 }
 
 
 render(){
-  const { empList } = this.state;
+  const { empList, activeEmp } = this.state;
   return( <div classNmae="container">
-    <EmpForm />
+    <EmpForm
+    activeEmp={activeEmp}
+     addNewEmploee={this.addNewEmploee}
+
+     />
     <h1>Employee List</h1>
-    <EmpTable empList={empList} />
+    <EmpTable      deleteEmployee={this.deleteEmployee}
+     editEmployee={this.editEmployee} empList={empList}/>
   </div>
   )
 }

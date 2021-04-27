@@ -1,4 +1,5 @@
 import React,  { Component } from "react";
+import equal from 'fast-deep-equal'
 
 
 
@@ -6,13 +7,23 @@ class EmpForm extends Component{
 
     constructor(props){
         super(props)
-
         this.state = {
-			empId: '',
-			empName: '',
-			email: '',
-            address:''
+			empId: "",
+			empName: "",
+			email: "",
+            address: ""
 		}
+    }
+
+    componentDidUpdate(prevProps){
+        if(!equal(this.props.activeEmp, prevProps.activeEmp)){
+        const { emp_id, emp_name, email, adress } = this.props.activeEmp;
+        this.setState({ empId: emp_id,
+        empName: emp_name,
+       email: email,
+       address: adress})
+        }
+
     }
 
     handleEmpIdChange = event => {
@@ -40,17 +51,31 @@ class EmpForm extends Component{
 	}
 
     handleSubmit = event => {
-		alert(`${this.state.empId} ${this.state.empName} ${this.state.email} ${this.state.address}`)
-		event.preventDefault()
+        const { addNewEmploee } = this.props;
+        const { empId, empName, email, address }  = this.state;
+		console.log(`${this.state.empId} ${this.state.empName} ${this.state.email} ${this.state.address}`)
+		event.preventDefault();
+
+        addNewEmploee({
+            email,
+            emp_id:empId,
+            emp_name: empName,
+            adress: address
+        })
+
+        this.setState({ empId: '',
+         empName: '',
+        email: '',
+        address:''})
+
 	}
-
-
 
 
     render(){
 
-       // const { empForm } = this.props;
         const { empId, empName, email, address } = this.state
+
+
 
         return(
             <div className="container">
@@ -89,7 +114,8 @@ class EmpForm extends Component{
                 </form>
             </div>
         )
-    }
+   }
+    
 
 
 

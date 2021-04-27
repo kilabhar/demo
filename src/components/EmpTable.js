@@ -10,7 +10,7 @@ class EmplTable extends Component{
 
 
     render(){
-        const { empList } = this.props;
+        const { empList, deleteEmployee, editEmployee  } = this.props;
 
         return(
             <div>
@@ -29,7 +29,8 @@ class EmplTable extends Component{
                             <td>{emp.emp_name}</td>
                             <td>{emp.email}</td>
                             <td>{emp.adress}</td>
-                            <td><button>Delete</button> | <button>Edit</button></td>
+                            <td><button onClick={()=>{deleteEmployee(emp.emp_id)}}>Delete</button> | 
+                            <button onClick={()=>{editEmployee(emp.emp_id) }}>Edit</button></td>
                         </tr>))
                         }
                     </tbody>
